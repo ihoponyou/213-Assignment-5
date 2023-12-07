@@ -1,4 +1,6 @@
-﻿namespace MusicShop.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MusicShop.Models
 {
     public class Product
     {

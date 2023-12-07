@@ -19,5 +19,7 @@ namespace MusicShop.Data
         public DbSet<MusicShop.Models.Customer> Customer { get; set; } = default!;
 
         public DbSet<MusicShop.Models.Order> Order { get; set; } = default!;
+
+        public DbSet<MusicShop.Models.Product> Product { get; set; } = default!;
     }
 }
