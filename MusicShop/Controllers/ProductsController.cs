@@ -20,7 +20,7 @@ namespace MusicShop.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string productGenre, string searchString)
+        public async Task<IActionResult> Index(string productGenre, string productPerformer, string searchString)
         {
             /*
               return _context.Product != null ? 
@@ -37,6 +37,10 @@ namespace MusicShop.Controllers
             IQueryable<string> genreQuery = from m in _context.Product
                                             orderby m.Genre
                                             select m.Genre;
+            // LINQ to get list of performers.
+            IQueryable<string> performerQuery = from m in _context.Product
+                                                orderby m.Performer
+                                                select m.Performer;
             var movies = from m in _context.Product
                          select m;
 
@@ -45,9 +49,15 @@ namespace MusicShop.Controllers
                 movies = movies.Where(x => x.Genre == productGenre);
             }
 
+            if (!string.IsNullOrEmpty(productPerformer))
+            {
+                movies = movies.Where(x => x.Performer == productPerformer);
+            }
+
             var movieGenreVM = new ProductGenreViewModel
             {
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Performers = new SelectList(await performerQuery.Distinct().ToListAsync()),
                 Products = await movies.ToListAsync()
             };
 
