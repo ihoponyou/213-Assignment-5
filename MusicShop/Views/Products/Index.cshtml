@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicShop.Models.Product>
+﻿@model MusicShop.Models.ProductGenreViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -6,49 +6,73 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Add to Cart</a>
-</p>
+<br />
+
+<div class="d-flex justify-content-between">
+    <form asp-controller="Products" asp-action="Index" method="get">
+        <div>
+            <select asp-for="ProductGenre" asp-items="Model.Genres">
+                <option value="">All</option>
+            </select>
+
+            <input type="submit" value="Filter" />
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index">Add to Cart</a>
+    </div>
+</div>
+
+<br />
+
 <table class="table">
+    <colgroup>
+        <col width="220">
+        <col width="60">
+        <col width="120">
+        <col width="30">
+        <col width="20">
+    </colgroup>
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Products![0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @Html.DisplayNameFor(model => model.Products![0].Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Performer)
+                @Html.DisplayNameFor(model => model.Products![0].Performer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Products![0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                @Html.DisplayNameFor(model => model.Products![0].Quantity)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Performer)
-            </td>
+        @foreach (var item in Model.Products!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Performer)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

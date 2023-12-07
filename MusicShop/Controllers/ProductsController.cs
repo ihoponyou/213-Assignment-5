@@ -20,11 +20,38 @@ namespace MusicShop.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string productGenre, string searchString)
         {
+            /*
               return _context.Product != null ? 
                           View(await _context.Product.ToListAsync()) :
                           Problem("Entity set 'MusicShopContext.Product'  is null.");
+            */
+
+            if (_context.Product == null)
+            {
+                return Problem("Entity set 'MusicShopContext.Product'  is null.");
+            }
+
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery = from m in _context.Product
+                                            orderby m.Genre
+                                            select m.Genre;
+            var movies = from m in _context.Product
+                         select m;
+
+            if (!string.IsNullOrEmpty(productGenre))
+            {
+                movies = movies.Where(x => x.Genre == productGenre);
+            }
+
+            var movieGenreVM = new ProductGenreViewModel
+            {
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Products = await movies.ToListAsync()
+            };
+
+            return View(movieGenreVM);
         }
 
         // GET: Products

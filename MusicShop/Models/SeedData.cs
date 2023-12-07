@@ -11,7 +11,7 @@ namespace MusicShop.Models
                 serviceProvider.GetRequiredService<
                     DbContextOptions<MusicShopContext>>()))
             {
-                // Look for any movies.
+                // Look for any products
                 if (context.Product.Any())
                 {
                     return;   // DB has been seeded
@@ -20,7 +20,7 @@ namespace MusicShop.Models
                     new Product
                     {
                         Title = "Sunday",
-                        Genre = "Alternative Rock",
+                        Genre = "Alternative",
                         Performer = "The Cranberries",
                         Price = 7.99m,
                         Quantity = 5
@@ -28,9 +28,33 @@ namespace MusicShop.Models
                     new Product
                     {
                         Title = "Zero",
-                        Genre = "Indie Rock",
+                        Genre = "Indie",
                         Performer = "The Smashing Pumpkins",
                         Price = 12.34m,
+                        Quantity = 99
+                    },
+                    new Product
+                    {
+                        Title = "Blind",
+                        Genre = "Metal",
+                        Performer = "The Smashing Pumpkins",
+                        Price = 8.38m,
+                        Quantity = 99
+                    },
+                    new Product
+                    {
+                        Title = "Twilight",
+                        Genre = "Alternative",
+                        Performer = "Bôa",
+                        Price = 10.00m,
+                        Quantity = 99
+                    },
+                    new Product
+                    {
+                        Title = "Please, Please, Please, Let Me Get What I Want",
+                        Genre = "Alternative",
+                        Performer = "The Smiths",
+                        Price = 19.84m,
                         Quantity = 99
                     }
                 );
