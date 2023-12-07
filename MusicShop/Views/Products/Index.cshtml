@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Lets Find Some Music!</h1>
+<h1>Index</h1>
 
 <br />
 
@@ -12,9 +12,6 @@
     <form asp-controller="Products" asp-action="Index" method="get">
         <div>
             <select asp-for="ProductGenre" asp-items="Model.Genres">
-                <option value="">All</option>
-            </select>
-            <select asp-for="ProductPerformer" asp-items="Model.Performers">
                 <option value="">All</option>
             </select>
 

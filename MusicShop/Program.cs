@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MusicShop.Data;
+using MusicShop.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MusicShopContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MusicShopContext") ?? throw new InvalidOperationException("Connection string 'MusicShopContext' not found.")));
@@ -9,6 +12,13 @@ builder.Services.AddDbContext<MusicShopContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

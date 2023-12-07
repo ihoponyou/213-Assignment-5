@@ -20,43 +20,34 @@ namespace MusicShop.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string productGenre, string productPerformer, string searchstring)
+        public async Task<IActionResult> Index(string productGenre, string searchString)
         {
+            /*
+              return _context.Product != null ? 
+                          View(await _context.Product.ToListAsync()) :
+                          Problem("Entity set 'MusicShopContext.Product'  is null.");
+            */
+
             if (_context.Product == null)
             {
-                return Problem("Entity set 'MusicShopContext.Product' is null.");
+                return Problem("Entity set 'MusicShopContext.Product'  is null.");
             }
 
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Product
                                             orderby m.Genre
                                             select m.Genre;
-
-            // Use LINQ to get list of performers.
-            IQueryable<string> performerQuery = from m in _context.Product
-                                                orderby m.Performer
-                                                select m.Performer;
-
             var movies = from m in _context.Product
                          select m;
 
-            if (!string.IsNullOrEmpty(productGenre) && !string.IsNullOrEmpty(productPerformer))
-            {
-                movies = movies.Where(x => x.Genre == productGenre && x.Performer == productPerformer);
-            }
-            else if (!string.IsNullOrEmpty(productGenre))
+            if (!string.IsNullOrEmpty(productGenre))
             {
                 movies = movies.Where(x => x.Genre == productGenre);
-            }
-            else if (!string.IsNullOrEmpty(productPerformer))
-            {
-                movies = movies.Where(x => x.Performer == productPerformer);
             }
 
             var movieGenreVM = new ProductGenreViewModel
             {
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
-                Performers = new SelectList(await performerQuery.Distinct().ToListAsync()),
                 Products = await movies.ToListAsync()
             };
 

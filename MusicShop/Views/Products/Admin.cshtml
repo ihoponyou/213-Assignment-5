@@ -10,6 +10,14 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
+    <colgroup>
+        <col width="220">
+        <col width="60">
+        <col width="120">
+        <col width="30">
+        <col width="20">
+        <col width="120">
+    </colgroup>
     <thead>
         <tr>
             <th>
@@ -48,7 +56,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
+            <td align="right">
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
