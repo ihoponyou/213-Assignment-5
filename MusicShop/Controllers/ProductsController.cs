@@ -27,6 +27,14 @@ namespace MusicShop.Controllers
                           Problem("Entity set 'MusicShopContext.Product'  is null.");
         }
 
+        // GET: Products
+        public async Task<IActionResult> Admin()
+        {
+            return _context.Product != null ?
+                        View(await _context.Product.ToListAsync()) :
+                        Problem("Entity set 'MusicShopContext.Product'  is null.");
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +64,7 @@ namespace MusicShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Performer,Quantity")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Performer,Price,Quantity")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +96,7 @@ namespace MusicShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Genre,Performer,Quantity")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Genre,Performer,Price,Quantity")] Product product)
         {
             if (id != product.Id)
             {
