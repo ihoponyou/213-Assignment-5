@@ -1,0 +1,32 @@
+﻿@model List<MusicShop.Models.Product>
+
+<form asp-controller="Products" asp-action="RemoveFromCart" method="post">
+    <input type="submit" value="Remove Selected Items" />
+    <input type="button" value="Order">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="selectedProductsToRemove" value="@product.Id" />
+                    </td>
+                    <td>
+                        @product.Title
+                    </td>
+                    <td>
+                        @product.Price
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

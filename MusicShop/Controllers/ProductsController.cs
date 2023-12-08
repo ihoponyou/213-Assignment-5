@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicShop.Data;
 using MusicShop.Models;
+using Newtonsoft.Json;
 
 namespace MusicShop.Controllers
 {
@@ -199,6 +200,81 @@ namespace MusicShop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public IActionResult AddToCart(List<int> selectedProducts)
+        {
+            // get current items in cart
+            List<int> cartItems = JsonConvert.DeserializeObject<List<int>>(Request.Cookies["CartItems"] ?? "[]");
+
+            if (selectedProducts != null && selectedProducts.Any())
+            {
+                foreach (var productId in selectedProducts)
+                {
+                    // get products from database
+                    var product = _context.Product.FirstOrDefault(p => p.Id == productId);
+
+                    if (product != null && product.Quantity > 0)
+                    {
+                        // decrease quantity -1 when adding to cart
+                        product.Quantity -= 1;
+                        _context.SaveChanges();
+
+                        cartItems.Add(productId);
+                    }
+                }
+            }
+
+            // save the cart
+            Response.Cookies.Append("CartItems", JsonConvert.SerializeObject(cartItems));
+
+            // stay on cart page
+            return RedirectToAction("Cart");
+        }
+
+
+        public IActionResult Cart()
+        {
+            // get items in the cart
+            List<int> cartItems = JsonConvert.DeserializeObject<List<int>>(Request.Cookies["CartItems"] ?? "[]");
+
+            // get the products based on id
+            List<Product> cartProducts = _context.Product.Where(p => cartItems.Contains(p.Id)).ToList();
+
+            return View(cartProducts);
+        }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(List<int> selectedProductsToRemove)
+        {
+            // get current cart items from the list
+            List<int> cartItems = JsonConvert.DeserializeObject<List<int>>(Request.Cookies["CartItems"] ?? "[]");
+
+            if (selectedProductsToRemove != null && selectedProductsToRemove.Any())
+            {
+                foreach (var productId in selectedProductsToRemove)
+                {
+                    // get the product from the database
+                    var product = _context.Product.FirstOrDefault(p => p.Id == productId);
+
+                    if (product != null)
+                    {
+                        // Add quantity +1 when removed from the cart
+                        product.Quantity += 1;
+                        _context.SaveChanges();
+
+                        cartItems.Remove(productId);
+                    }
+                }
+            }
+
+            // save cart
+            Response.Cookies.Append("CartItems", JsonConvert.SerializeObject(cartItems));
+
+            // stay in the cart page after removing items
+            return RedirectToAction("Cart");
+        }
+
 
         private bool ProductExists(int id)
         {
